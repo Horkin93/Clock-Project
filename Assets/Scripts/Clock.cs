@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Networking;
 using TMPro;
+using UnityEngine.UIElements;
 
 public class Clock : MonoBehaviour
 {
@@ -12,7 +13,13 @@ public class Clock : MonoBehaviour
     [SerializeField] private GameObject _seconds;
     [Header("Digital Clock")]
     [SerializeField] private TextMeshProUGUI _digitalClock;
+    
+    [Header("AlarmClock")]
+    [SerializeField] private TextMeshProUGUI _alarmButtonText;
+    [SerializeField] private TextMeshProUGUI _alarmText;
+
     private DateTime _currentTime;
+    private bool _editMode = false;
 
     private enum Provider
     {
@@ -57,7 +64,15 @@ public class Clock : MonoBehaviour
             _digitalClock.transform.localPosition = new Vector3(0, 600);
         }
         _currentTime = _currentTime.AddSeconds(Time.deltaTime);
-        SetTime(_currentTime);
+        if (!_editMode)
+        {
+            SetTime(_currentTime);
+        }
+        else
+        {
+
+        }
+        
     }
 
     private void SetTime(DateTime time)
@@ -111,8 +126,22 @@ public class Clock : MonoBehaviour
                     _currentTime = new DateTime(1970, 1, 1, 3, 0, 0, 0).AddSeconds(unixTime.UnixTimeStamp);
                     break;
             }
-            
+        }
+    }
+
+    public void SetAlarmClock()
+    {
+        if (!_editMode)
+        {
+            _alarmButtonText.text = "Задать";
+        }
+        else
+        {
+            _alarmButtonText.text = "Будильник";
         }
 
+        _editMode = !_editMode;
+        
     }
+
 }
